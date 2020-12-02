@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>REST API Playground</title>
+		<link rel='stylesheet' href='node_modules/bootstrap/dist/css/bootstrap.min.css'>
+		<link rel='stylesheet' href='data/style.css'>
+		<link rel='stylesheet' href='data/highlight/styles/tomorrow-night.css'>
+	</head>
+	<body>
+		<header class='jumbotron'>
+			<div class='display-4'>REST API Playground</div>
+			<p class='lead'>
+				A virtual REST API for learners to play around with.
+			</p>
+		</header>
+		<main class='text-white'>
+			<form novalidate onsubmit='processRequest();'>
+				<label for='endpoint'>Endpoint:</label>
+				<div class='input-group'>
+					<div class='input-group-prepend'>
+						<span class='input-group-text'>https://api.example.com/</span>
+					</div>
+					<input id='endpoint' name='endpoint' placeholder="students" class='form-control'/>
+				</div>
+				<div>
+					<label for='server-data'>Data:</label>
+					<pre><code class='json' id='server-data'>{}</code></pre>
+				</div>
+				<div class='container-fluid'>
+					<div class='row'>
+						<div class='col-12 col-md-6'>
+							<label for='request-data'>Request:</label>
+							<div><pre><code class='json' 
+								id='request-data' contenteditable>{"a":true}</code></pre></div>
+							<div id='invalid-request' class='alert alert-danger'>Invalid request!</div>
+						</div>
+						<div class='col-12 col-md-6'>
+							<label for='response-data'>Response:</label>
+							<pre><code class='json' id='response-data'></code></pre>
+						</div>
+					</div>
+				</div>
+			</form>
+		</main>
+		<footer>
+			Footer
+		</footer>
+		<script src='node_modules/popper.js/dist/umd/popper.min.js'></script>
+		<script src='node_modules/jquery/dist/jquery.min.js'></script>
+		<script src='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'></script>
+		<script src='data/highlight/highlight.pack.js'></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<script src='data/render.js'></script>
+	</body>
+</html>

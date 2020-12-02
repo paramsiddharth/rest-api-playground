@@ -1,0 +1,26 @@
+{
+  "name": "rest-api-playground",
+  "version": "1.0.0",
+  "description": "A virtual REST API for learners to play around with.",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rest",
+    "api",
+    "playground",
+    "learn"
+  ],
+  "author": "Param Siddharth <contact@paramsid.com> (http://www.paramsid.com)",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "serve": "^11.3.2"
+  }
+}

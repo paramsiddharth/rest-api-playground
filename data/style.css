@@ -1,0 +1,39 @@
+.jumbotron {
+	background-color: rgb(124, 26, 26);
+	border-radius: 0;
+	margin-bottom: 0;
+	color: blanchedalmond;
+}
+
+.jumbotron > .display-4 {
+	font-weight: bold;
+}
+
+.jumbotron > .lead {
+	font-size: x-large;
+}
+
+:root {
+	scroll-behavior: smooth;
+}
+
+main {
+	background-color: rgb(153, 93, 209);
+	padding: 1em 10em;
+}
+
+footer {
+	background-color: darkblue;
+}
+
+textarea {
+	width: 100%;
+}
+
+.full-width {
+	width: 100%;
+}
+
+code {
+	white-space: pre;
+}
