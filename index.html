@@ -2,9 +2,11 @@
 <html>
 	<head>
 		<title>REST API Playground</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
 		<link rel='stylesheet' href='node_modules/bootstrap/dist/css/bootstrap.min.css'>
+		<link rel='stylesheet' href='node_modules/font-awesome/css/font-awesome.min.css'>
 		<link rel='stylesheet' href='data/style.css'>
-		<link rel='stylesheet' href='data/highlight/styles/tomorrow-night.css'>
+		<link rel='stylesheet' href='data/highlight/styles/vs2015.css'>
 	</head>
 	<body>
 		<header class='jumbotron'>
@@ -13,35 +15,71 @@
 				A virtual REST API for learners to play around with.
 			</p>
 		</header>
-		<main class='text-white'>
-			<form novalidate onsubmit='processRequest();'>
-				<label for='endpoint'>Endpoint:</label>
-				<div class='input-group'>
-					<div class='input-group-prepend'>
-						<span class='input-group-text'>https://api.example.com/</span>
-					</div>
-					<input id='endpoint' name='endpoint' placeholder="students" class='form-control'/>
-				</div>
-				<div>
-					<label for='server-data'>Data:</label>
-					<pre><code class='json' id='server-data'>{}</code></pre>
-				</div>
-				<div class='container-fluid'>
-					<div class='row'>
-						<div class='col-12 col-md-6'>
-							<label for='request-data'>Request:</label>
-							<div><pre><code class='json' 
-								id='request-data' contenteditable>{"a":true}</code></pre></div>
-							<div id='invalid-request' class='alert alert-danger'>Invalid request!</div>
+		<div class="main-wrapper">
+			<main class='container-fluid p-md-5 text-white'>
+				<form novalidate onsubmit="return false;">
+					<label for='endpoint'>Endpoint:</label>
+					<div class='input-group'>
+						<div class='input-group-prepend'>
+							<span class='input-group-text'>https://api.example.com/</span>
 						</div>
-						<div class='col-12 col-md-6'>
-							<label for='response-data'>Response:</label>
-							<pre><code class='json' id='response-data'></code></pre>
+						<input id='endpoint' name='endpoint' placeholder="students" class='form-control'/>
+					</div>
+					<div class="mt-2">
+						<label for='server-data'>Data:</label>
+						<pre><code class='json' id='server-data'><div>{}</div></code></pre>
+					</div>
+					<div class='container-fluid'>
+						<div class='row'>
+							<div class='col-12 col-md-6'>
+								<label for='request-data'>Request:</label>
+								<div><pre><code class='json' 
+									id='request-data' contenteditable>{"a":true}</code></pre></div>
+								<div id='invalid-request' class='alert alert-danger'>Invalid request!</div>
+							</div>
+							<div class='col-12 col-md-6'>
+								<label for='response-data'>Response:</label>
+								<pre><code class='json' id='response-data'></code></pre>
+							</div>
 						</div>
 					</div>
-				</div>
-			</form>
-		</main>
+					<div class='container-fluid'>
+						<div class="row">
+							<div class='col-12 col-md-6 offset-md-3'>
+								<div class='btn-group btn-group-toggle w-100' data-toggle='buttons'>
+									<label class='btn btn-light border active'>
+										<input type='radio' id='getReq' name='reqMethod' value='GET'
+											autocomplete="off" checked /> GET
+									</label>
+									<label class='btn btn-light border'>
+										<input type='radio' id='postReq' name='reqMethod' value='POST'
+											autocomplete="off" /> POST
+									</label>
+									<label class='btn btn-light border'>
+										<input type='radio' id='putReq' name='reqMethod' value='PUT'
+											autocomplete="off" /> PUT
+									</label>
+									<label class='btn btn-light border'>
+										<input type='radio' id='delReq' name='reqMethod' value='DELETE'
+											autocomplete="off" /> DELETE
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class='row mt-2'>
+							<div class='col-12 col-md-4 offset-md-4'>
+								<button onclick="processRequest();" id='sendReq'
+									class='btn btn-success btn-block border-dark'>
+									<h4 class='d-inline-block'>
+										<i class="fa fa-send fa-lg"></i>&nbsp;&nbsp;Send Request
+									</h4>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</main>
+		</div>
 		<footer>
 			Footer
 		</footer>
@@ -50,6 +88,7 @@
 		<script src='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'></script>
 		<script src='data/highlight/highlight.pack.js'></script>
 		<script>hljs.initHighlightingOnLoad();</script>
+		<script src='node_modules/uri-js/dist/es5/uri.all.min.js'></script>
 		<script src='data/render.js'></script>
 	</body>
 </html>

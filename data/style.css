@@ -17,23 +17,42 @@
 	scroll-behavior: smooth;
 }
 
+.main-wrapper {
+	width: 100%;
+}
+
 main {
 	background-color: rgb(153, 93, 209);
-	padding: 1em 10em;
+	padding: 1em 5em;
 }
 
 footer {
 	background-color: darkblue;
 }
 
-textarea {
-	width: 100%;
-}
-
-.full-width {
-	width: 100%;
-}
-
 code {
-	white-space: pre;
+	max-height: 300px;
+	scroll-behavior: smooth;
+}
+
+code > div {
+	overflow: auto;
+}
+
+@media (max-width: 768px) {
+	.jumbotron > .display-4 {
+		font-size: 20px;
+	}
+
+	.jumbotron > .lead {
+		font-size: 15px;
+	}
+
+	.jumbotron {
+		max-height: 110px;
+	}
+
+	#server-data {
+		height: 200px;
+	}
 }
