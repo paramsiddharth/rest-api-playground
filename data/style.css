@@ -31,6 +31,9 @@ footer {
 }
 
 code {
+	border-radius: 7px;
+	border: 2px dotted rgb(179, 255, 0);
+	padding: 10px;
 	max-height: 300px;
 	scroll-behavior: smooth;
 }
