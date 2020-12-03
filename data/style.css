@@ -22,7 +22,7 @@
 }
 
 main {
-	background-color: rgb(153, 93, 209);
+	background-color: rgb(11, 170, 32);
 	padding: 1em 5em;
 }
 
@@ -58,4 +58,21 @@ code > div {
 	#server-data {
 		height: 200px;
 	}
+}
+
+footer {
+	min-height: 30px;
+	font-weight: bolder;
+}
+
+footer a {
+	color: #00ffdd;
+}
+
+footer a:hover {
+	color: rgb(108, 199, 108);
+}
+
+label.active::before {
+	content: '[✓]';
 }
