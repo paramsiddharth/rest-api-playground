@@ -53,7 +53,7 @@ $(function() {
 	$('[name=reqMethod]').on('click', function() {
 		let v = $(this).val();
 		window.dataState.setReqMethod(v);
-		if (v == 'GET' || v == 'DELETE') {
+		if (v === 'GET' || v === 'DELETE') {
 			$('code.hljs#request-data').css({
 				backgroundColor: '#2E2E2E',
 				color: '#ABABAB',
@@ -68,7 +68,13 @@ $(function() {
 		}
 	});
 
-	$('[name=reqMethod][value=GET]').trigger('click');
+	if (window.dataState.reqMethod === 'GET') {
+		$('code.hljs#request-data').css({
+			backgroundColor: '#2E2E2E',
+			color: '#ABABAB',
+			filter: 'grayscale(50%)'
+		}).prop('contentEditable', false);
+	}
 });
 
 let initialRequest = {
