@@ -51,12 +51,27 @@ $(function() {
 	});
 
 	$('[name=reqMethod]').on('click', function() {
-		window.dataState.setReqMethod($(this).val());
+		let v = $(this).val();
+		window.dataState.setReqMethod(v);
+		if (v == 'GET' || v == 'DELETE') {
+			$('code.hljs#request-data').css({
+				backgroundColor: '#2E2E2E',
+				color: '#ABABAB',
+				filter: 'grayscale(50%)'
+			}).prop('contentEditable', false);
+		} else {
+			$('code.hljs#request-data').css({
+				backgroundColor: '#1E1E1E',
+				color: '#DCDCDC',
+				filter: 'grayscale(0%)'
+			}).prop('contentEditable', true);
+		}
 	});
+
+	$('[name=reqMethod][value=GET]').trigger('click');
 });
 
 let initialRequest = {
-	id: 2,
 	name: 'Nitin Pandey',
 	age: new Date(new Date() - new Date('2001/10/02 00:00')).getFullYear() - 1970,
 	talents: [
@@ -385,7 +400,7 @@ const complexEndpoint = (id, ep) => {
 };
 
 const simpleEndpoint = () => {
-	let newObj, leftOver;
+	let newObj, leftOver, idNew;
 	switch (window.dataState.reqMethod) {
 
 		case 'GET':
@@ -416,47 +431,56 @@ const simpleEndpoint = () => {
 
 				case 'students':
 				case 'students/':
-					if (window.dataState.ser.students.filter(s => s.id === window.dataState.req.id).length > 0) {
+					if (window.dataState.req.hasOwnProperty('id')) {
 						window.dataState.setRes({
 							status: STATUS_FAIL,
-							message: `Student #${window.dataState.req.id} already present`
+							message: `${window.dataState.reqMethod} request body may not carry ID`
 						});
 						return;
 					}
+					idNew = Math.max(...window.dataState.ser.students.map(s => s.id)) + 1;
+					leftOver = {
+						id: idNew,
+						...(window.dataState.req)
+					};
 					newObj = window.dataState.ser;
 					newObj.students = [
 						...(newObj.students),
-						window.dataState.req
+						leftOver
 					];
 					window.dataState.setSer(newObj);
 					window.dataState.setRes({
 						status: STATUS_OK,
 						message: 'Student added',
-						data: window.dataState.ser.students.filter(s => s.id === window.dataState.req.id)[0]
+						data: window.dataState.ser.students.filter(s => s.id === idNew)[0]
 					});
 					return;
 
 				case 'dishes':
 				case 'dishes/':
-					if (window.dataState.ser.dishes.filter(s => s.id === window.dataState.req.id).length > 0) {
+					if (window.dataState.req.hasOwnProperty('id')) {
 						window.dataState.setRes({
 							status: STATUS_FAIL,
-							message: `Dish #${window.dataState.req.id} already present`
+							message: `${window.dataState.reqMethod} request body may not carry ID`
 						});
 						return;
 					}
+					idNew = Math.max(...window.dataState.ser.dishes.map(s => s.id)) + 1;
+					leftOver = {
+						id: idNew,
+						...(window.dataState.req)
+					};
 					newObj = window.dataState.ser;
 					newObj.dishes = [
 						...(newObj.dishes),
-						window.dataState.req
+						leftOver
 					];
 					window.dataState.setSer(newObj);
 					window.dataState.setRes({
 						status: STATUS_OK,
 						message: 'Dish added',
-						data: window.dataState.ser.students.filter(s => s.id === window.dataState.req.id)[0]
+						data: window.dataState.ser.dishes.filter(s => s.id === idNew)[0]
 					});
-
 			}
 			return;
 
