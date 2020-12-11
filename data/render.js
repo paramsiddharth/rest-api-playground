@@ -28,6 +28,8 @@ $(function() {
 	hljs.highlightBlock($('#server-data').get(0));
 	hljs.highlightBlock($('#response-data').get(0));
 
+	$('.non-standard-put-box').hide();
+
 	$('#request-data').on('keydown', function(e) {
 		if(e.key == 'Tab') {
 			e.preventDefault();
@@ -66,6 +68,13 @@ $(function() {
 				filter: 'grayscale(0%)'
 			}).prop('contentEditable', true);
 		}
+		if (v === 'PUT') {
+			$('.non-standard-put-box').show();
+		}
+		else {
+			$('.non-standard-put-box').hide();
+			$('#non-standard-put').prop('checked', false);
+		}
 	});
 
 	if (window.dataState.reqMethod === 'GET') {
@@ -75,6 +84,14 @@ $(function() {
 			filter: 'grayscale(50%)'
 		}).prop('contentEditable', false);
 	}
+
+	window.x = new Tooltip($('#ns-tooltip'), {
+		placement: 'top',
+		trigger: 'hover',
+		offset: '60px, 5px',
+		title: 'Doesn\'t overwrite object; Updates only the modified properties.',
+		template: '<div style="opacity: 1; width: 14em;" class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+	});
 });
 
 let initialRequest = {
@@ -189,7 +206,10 @@ const validateEndpoint = () => {
 				return;
 			}
 			
-			complexEndpoint(id, ep);
+			if ($('#non-standard-put').prop('checked'))
+				complexEndpointNonStandard(id, ep);
+			else
+				complexEndpoint(id, ep);
 			return;
 		}
 	}
@@ -200,6 +220,212 @@ const validateEndpoint = () => {
 }
 
 const complexEndpoint = (id, ep) => {
+	let newObj, leftOver, oneMore;
+	switch (window.dataState.reqMethod) {
+
+		case 'GET':
+			switch (ep) {
+
+				case 'students':
+				case 'students/':
+					newObj = window.dataState.ser.students.filter(s => s.id === id);
+					if (newObj.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Student #${id} not found`
+						});
+						return;
+					}
+					window.dataState.setRes({
+						status: STATUS_OK,
+						message: 'Student',
+						data: newObj[0]
+					});
+					return;
+
+				case 'dishes':
+				case 'dishes/':
+					newObj = window.dataState.ser.dishes.filter(s => s.id === id);
+					if (newObj.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Dish #${id} not found`
+						});
+						return;
+					}
+					window.dataState.setRes({
+						status: STATUS_OK,
+						message: 'Dish',
+						data: newObj[0]
+					});
+
+			}
+		return;
+
+		case 'POST':
+			window.dataState.setRes({
+				status: STATUS_FAIL,
+				message: `${window.dataState.reqMethod} not supported on /${window.dataState.ep}`
+			});
+			return;
+
+		case 'PUT':
+			switch (ep) {
+				
+				case 'students':
+				case 'students/':
+					if (window.dataState.req.hasOwnProperty('id')) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `${window.dataState.reqMethod} request body may not carry ID`
+						});
+						return;
+					}
+					newObj = window.dataState.ser.students;
+					leftOver = newObj.filter(s => s.id === id);
+					if (leftOver.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Student #${id} not found`
+						});
+						return;
+					}
+					for (let i = 0; i < newObj.length; i++) {
+						if (newObj[i].id === id) {
+							oneMore = {
+								id: newObj[i].id,
+								...(window.dataState.req)
+							};
+							window.dataState.ser.students.splice(i, 1);
+							leftOver = [
+								...(window.dataState.ser.students),
+								oneMore
+							];
+							newObj = window.dataState.ser;
+							newObj.students = leftOver;
+							window.dataState.setSer(newObj);
+							oneMore = window.dataState.ser.students.filter(s => s.id === id)[0];
+							window.dataState.setRes({
+								status: STATUS_OK,
+								message: `Student updated`,
+								data: oneMore
+							});
+							return;
+						}
+					}
+					return;
+				
+				case 'dishes':
+				case 'dishes/':
+					if (window.dataState.req.hasOwnProperty('id')) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `${window.dataState.reqMethod} request body may not carry ID`
+						});
+						return;
+					}
+					newObj = window.dataState.ser.dishes;
+					leftOver = newObj.filter(s => s.id === id);
+					if (leftOver.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Dish #${id} not found`
+						});
+						return;
+					}
+					for (let i = 0; i < newObj.length; i++) {
+						if (newObj[i].id === id) {
+							oneMore = {
+								...newObj[i],
+								...(window.dataState.req)
+							};
+							window.dataState.ser.dishes.splice(i, 1);
+							leftOver = [
+								...(window.dataState.ser.dishes),
+								oneMore
+							];
+							newObj = window.dataState.ser;
+							newObj.dishes = leftOver;
+							window.dataState.setSer(newObj);
+							oneMore = window.dataState.ser.dishes.filter(s => s.id === id)[0];
+							window.dataState.setRes({
+								status: STATUS_OK,
+								message: `Dish updated`,
+								data: oneMore
+							});
+							return;
+						}
+					}
+
+			}
+			return;
+		
+		case 'DELETE':
+
+			switch (ep) {
+
+				case 'students':
+				case 'students/':
+					newObj = window.dataState.ser.students;
+					leftOver = newObj.filter(s => s.id === id);
+					if (leftOver.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Student #${id} not found`
+						});
+						return;
+					}
+					for (let i = 0; i < newObj.length; i++) {
+						if (newObj[i].id === id) {
+							oneMore = newObj[i];
+							window.dataState.ser.students.splice(i, 1);
+							window.dataState.setSer(window.dataState.ser);
+							leftOver = window.dataState.ser.students.filter(s => s.id === id).length;
+							if (leftOver === 0) {
+								window.dataState.setRes({
+									status: STATUS_OK,
+									message: `Student deleted`,
+									data: oneMore
+								});
+							}
+							return;
+						}
+					}
+					return;
+				
+				case 'dishes':
+				case 'dishes/':
+					newObj = window.dataState.ser.dishes;
+					leftOver = newObj.filter(s => s.id === id);
+					if (leftOver.length < 1) {
+						window.dataState.setRes({
+							status: STATUS_FAIL,
+							message: `Dish #${id} not found`
+						});
+						return;
+					}
+					for (let i = 0; i < newObj.length; i++) {
+						if (newObj[i].id === id) {
+							oneMore = newObj[i];
+							window.dataState.ser.dishes.splice(i, 1);
+							window.dataState.setSer(window.dataState.ser);
+							leftOver = window.dataState.ser.dishes.filter(s => s.id === id).length;
+							if (leftOver === 0) {
+								window.dataState.setRes({
+									status: STATUS_OK,
+									message: `Dish deleted`,
+									data: oneMore
+								});
+							}
+							return;
+						}
+					}
+				
+			}
+	}
+};
+
+const complexEndpointNonStandard = (id, ep) => {
 	let newObj, leftOver, oneMore;
 	switch (window.dataState.reqMethod) {
 

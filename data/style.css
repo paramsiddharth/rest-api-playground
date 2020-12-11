@@ -22,7 +22,7 @@
 }
 
 main {
-	background-color: rgb(11, 170, 32);
+	background-color: rgb(78, 23, 95);
 	padding: 1em 5em;
 }
 
@@ -32,7 +32,7 @@ footer {
 
 code {
 	border-radius: 7px;
-	border: 2px dotted rgb(179, 255, 0);
+	border: 2px dotted rgb(131, 131, 131);
 	padding: 10px;
 	height: 270px;
 	scroll-behavior: smooth;
@@ -40,6 +40,14 @@ code {
 
 code > div {
 	overflow: auto;
+}
+
+#ns-tooltip {
+	display: inline-block;
+	background-color: black;
+	color: white;
+	border-radius: 100%;
+	cursor: pointer;
 }
 
 @media (max-width: 768px) {
