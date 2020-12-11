@@ -671,6 +671,8 @@ const simpleEndpoint = () => {
 						return;
 					}
 					idNew = Math.max(...window.dataState.ser.students.map(s => s.id)) + 1;
+					if (!isFinite(idNew))
+						idNew = 0;
 					leftOver = {
 						id: idNew,
 						...(window.dataState.req)
@@ -697,7 +699,9 @@ const simpleEndpoint = () => {
 						});
 						return;
 					}
-					idNew = Math.max(...window.dataState.ser.dishes.map(s => s.id)) + 1;
+					idNew = Math.max(...window.dataState.ser.dishes.map(s => s.id)) ?? 0 + 1;
+					if (!isFinite(idNew))
+						idNew = 0;
 					leftOver = {
 						id: idNew,
 						...(window.dataState.req)
